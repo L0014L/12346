@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>支付宝预约单</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1677ff',
+            secondary: '#00b42a',
+            accent: '#722ed1',
+            neutral: '#f5f5f5',
+            dark: '#1f2937'
+          },
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .card-shadow {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+      .input-focus {
+        @apply focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all duration-200;
+      }
+      .btn-hover {
+        @apply hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300;
+      }
+    }
+  </style>
+</head>
+<body class="font-inter bg-gray-50 text-dark">
+  <div class="min-h-screen flex flex-col">
+    <!-- 顶部导航 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50 transition-all duration-300" id="navbar">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i class="fa-brands fa-alipay text-primary text-2xl"></i>
+          <span class="text-xl font-semibold">支付宝预约服务</span>
+        </div>
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="#" class="text-gray-600 hover:text-primary transition-colors">首页</a>
+          <a href="#" class="text-gray-600 hover:text-primary transition-colors">预约管理</a>
+          <a href="#" class="text-gray-600 hover:text-primary transition-colors">帮助中心</a>
+          <a href="#" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg btn-hover">登录</a>
+        </nav>
+        <button class="md:hidden text-gray-600 text-xl">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+      <div class="mb-8">
+        <h1 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold mb-2">贷款预约申请</h1>
+        <p class="text-gray-600 max-w-3xl">请填写以下信息完成预约申请，我们的客服将在24小时内与您联系。</p>
+      </div>
+
+      <div class="bg-white rounded-xl p-6 md:p-8 card-shadow mb-8">
+        <form id="appointmentForm" class="space-y-6">
+          <!-- 基本信息 -->
+          <div class="bg-neutral rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+              <i class="fa-solid fa-user-circle text-primary mr-2"></i>基本信息
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">姓名</label>
+                <input type="text" id="name" name="name" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+              </div>
+              <div>
+                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">电话</label>
+                <input type="tel" id="phone" name="phone" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+              </div>
+              <div>
+                <label for="checkDate" class="block text-sm font-medium text-gray-700 mb-1">检测时间</label>
+                <input type="date" id="checkDate" name="checkDate" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+              </div>
+              <div>
+                <label for="servicePeriod" class="block text-sm font-medium text-gray-700 mb-1">服务周期</label>
+                <select id="servicePeriod" name="servicePeriod" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+                  <option value="">请选择</option>
+                  <option value="45days">45天</option>
+                  <option value="2months">2个月</option>
+                  <option value="3months">3个月</option>
+                  <option value="4months">4个月</option>
+                  <option value="5months">5个月</option>
+                  <option value="6months">6个月</option>
+                </select>
+              </div>
+              <div>
+                <label for="customerService" class="block text-sm font-medium text-gray-700 mb-1">跟单客服</label>
+                <input type="text" id="customerService" name="customerService" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus"
+                  placeholder="请输入负责的客服姓名">
+              </div>
+            </div>
+          </div>
+
+          <!-- 账户资料 -->
+          <div class="bg-neutral rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+              <i class="fa-solid fa-wallet text-primary mr-2"></i>账户资料
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="sesameScore" class="block text-sm font-medium text-gray-700 mb-1">芝麻分</label>
+                <input type="number" id="sesameScore" name="sesameScore" min="350" max="950" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+              </div>
+              <div>
+                <label for="overdueRecord" class="block text-sm font-medium text-gray-700 mb-1">借呗/花呗有无逾期记录</label>
+                <select id="overdueRecord" name="overdueRecord" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+                  <option value="">请选择</option>
+                  <option value="no">无</option>
+                  <option value="yes">有</option>
+                </select>
+              </div>
+              <div>
+                <label for="financialScore" class="block text-sm font-medium text-gray-700 mb-1">理财分</label>
+                <input type="number" id="financialScore" name="financialScore" min="0" max="1000" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+              </div>
+              <div>
+                <label for="jiebeiLimit" class="block text-sm font-medium text-gray-700 mb-1">借呗额度</label>
+                <input type="number" id="jiebeiLimit" name="jiebeiLimit" min="0" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+              </div>
+              <div>
+                <label for="huabeiLimit" class="block text-sm font-medium text-gray-700 mb-1">花呗额度</label>
+                <input type="number" id="huabeiLimit" name="huabeiLimit" min="0" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+              </div>
+              <div>
+                <label for="wangshangdaiLimit" class="block text-sm font-medium text-gray-700 mb-1">网商贷额度</label>
+                <input type="number" id="wangshangdaiLimit" name="wangshangdaiLimit" min="0"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+              </div>
+              <div>
+                <label for="loanAmount" class="block text-sm font-medium text-gray-700 mb-1">需要贷款额</label>
+                <input type="number" id="loanAmount" name="loanAmount" min="0" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+              </div>
+              <div>
+                <label for="dailyFlow" class="block text-sm font-medium text-gray-700 mb-1">计划每天可匹配流水数额</label>
+                <input type="number" id="dailyFlow" name="dailyFlow" min="0" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+              </div>
+              <div>
+                <label for="startDate" class="block text-sm font-medium text-gray-700 mb-1">开始走流水时间</label>
+                <input type="date" id="startDate" name="startDate" required
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg input-focus">
+              </div>
+            </div>
+          </div>
+
+          <!-- 支付方式 -->
+          <div class="bg-neutral rounded-lg p-6">
+            <h2 class="text-xl font-semibold mb-4 flex items-center">
+              <i class="fa-solid fa-credit-card text-primary mr-2"></i>选择支付方式
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="payment-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-primary transition-colors duration-200 flex items-center">
+                <input type="radio" id="alipay" name="paymentMethod" value="alipay" class="mr-3" checked>
+                <label for="alipay" class="flex items-center cursor-pointer">
+                  <i class="fa-brands fa-alipay text-primary text-2xl mr-2"></i>
+                  <span>支付宝</span>
+                </label>
+              </div>
+              <div class="payment-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-primary transition-colors duration-200 flex items-center">
+                <input type="radio" id="wechat" name="paymentMethod" value="wechat" class="mr-3">
+                <label for="wechat" class="flex items-center cursor-pointer">
+                  <i class="fa-brands fa-weixin text-green-500 text-2xl mr-2"></i>
+                  <span>微信支付</span>
+                </label>
+              </div>
+              <div class="payment-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-primary transition-colors duration-200 flex items-center">
+                <input type="radio" id="unionpay" name="paymentMethod" value="unionpay" class="mr-3">
+                <label for="unionpay" class="flex items-center cursor-pointer">
+                  <i class="fa-brands fa-cc-unionpay text-blue-600 text-2xl mr-2"></i>
+                  <span>银联</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- 提交按钮 -->
+          <div class="flex justify-center pt-4">
+            <button type="submit" class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg text-lg font-medium btn-hover flex items-center">
+              <i class="fa-solid fa-paper-plane mr-2"></i>
+              提交预约申请
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 支付方式说明 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-xl card-shadow hover:shadow-lg transition-shadow duration-300">
+          <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+            <i class="fa-brands fa-alipay text-primary text-xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">支付宝支付</h3>
+          <p class="text-gray-600">使用支付宝账户进行支付，支持余额、银行卡、余额宝等多种付款方式。</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl card-shadow hover:shadow-lg transition-shadow duration-300">
+          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+            <i class="fa-brands fa-weixin text-green-500 text-xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">微信支付</h3>
+          <p class="text-gray-600">使用微信账户进行支付，支持零钱、银行卡等多种付款方式。</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl card-shadow hover:shadow-lg transition-shadow duration-300">
+          <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+            <i class="fa-brands fa-cc-unionpay text-blue-600 text-xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">银联支付</h3>
+          <p class="text-gray-600">使用银联卡进行支付，支持国内所有商业银行的借记卡和信用卡。</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-lg font-semibold mb-4">支付宝预约服务</h3>
+            <p class="text-gray-400">为您提供便捷的金融服务预约，让您的财务规划更简单。</p>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-4">快速链接</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">预约管理</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">帮助中心</a></li>
+              <li><a href="#" class="text-gray-400 hover:text-white transition-colors">联系我们</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-4">联系我们</h3>
+            <ul class="space-y-2">
+              <li class="flex items-center">
+                <i class="fa-solid fa-phone mr-2 text-gray-400"></i>
+                <span class="text-gray-400">18933356585</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fa-solid fa-envelope mr-2 text-gray-400"></i>
+                <span class="text-gray-400">2602252684@qq.com</span>
+              </li>
+              <li class="flex items-center">
+                <i class="fa-solid fa-map-marker-alt mr-2 text-gray-400"></i>
+                <span class="text-gray-400">北京市朝阳区金融中心</span>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold mb-4">关注我们</h3>
+            <div class="flex space-x-4">
+              <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors">
+                <i class="fa-brands fa-weibo text-white"></i>
+              </a>
+              <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors">
+                <i class="fa-brands fa-weixin text-white"></i>
+              </a>
+              <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-primary transition-colors">
+                <i class="fa-brands fa-alipay text-white"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+          <p>&copy; 2025 支付宝预约服务. 保留所有权利.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- 成功提示弹窗 -->
+  <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fa-solid fa-check text-green-500 text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">预约申请成功！</h3>
+        <p class="text-gray-600 mb-6">我们的客服将在24小时内与您联系，请保持电话畅通。</p>
+        <button id="closeModal" class="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg btn-hover">
+          确定
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 10) {
+        navbar.classList.add('shadow-md', 'bg-white/95', 'backdrop-blur-sm');
+        navbar.classList.remove('shadow-sm');
+      } else {
+        navbar.classList.remove('shadow-md', 'bg-white/95', 'backdrop-blur-sm');
+        navbar.classList.add('shadow-sm');
+      }
+    });
+
+    // 表单提交处理
+    const appointmentForm = document.getElementById('appointmentForm');
+    appointmentForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // 显示成功提示
+      const successModal = document.getElementById('successModal');
+      const modalContent = document.getElementById('modalContent');
+      
+      successModal.classList.remove('hidden');
+      setTimeout(() => {
+        modalContent.classList.remove('scale-95', 'opacity-0');
+        modalContent.classList.add('scale-100', 'opacity-100');
+      }, 10);
+      
+      // 重置表单
+      appointmentForm.reset();
+    });
+
+    // 关闭弹窗
+    const closeModal = document.getElementById('closeModal');
+    closeModal.addEventListener('click', () => {
+      const successModal = document.getElementById('successModal');
+      const modalContent = document.getElementById('modalContent');
+      
+      modalContent.classList.remove('scale-100', 'opacity-100');
+      modalContent.classList.add('scale-95', 'opacity-0');
+      
+      setTimeout(() => {
+        successModal.classList.add('hidden');
+      }, 300);
+    });
+
+    // 支付方式选择
+    const paymentOptions = document.querySelectorAll('.payment-option');
+    paymentOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        const radio = option.querySelector('input[type="radio"]');
+        radio.checked = true;
+        
+        // 更新UI显示
+        paymentOptions.forEach(opt => {
+          opt.classList.remove('border-primary', 'bg-blue-50');
+          opt.classList.add('border-gray-200');
+        });
+        option.classList.remove('border-gray-200');
+        option.classList.add('border-primary', 'bg-blue-50');
+      });
+    });
+
+    // 添加输入框动画效果
+    const inputs = document.querySelectorAll('input, select');
+    inputs.forEach(input => {
+      input.addEventListener('focus', () => {
+        input.parentElement.classList.add('scale-[1.01]');
+        setTimeout(() => {
+          input.parentElement.classList.remove('scale-[1.01]');
+        }, 200);
+      });
+    });
+  </script>
+</body>
+</html>  
